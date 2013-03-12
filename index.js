@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////
 // created by: Dov Amihod
-// Date : Dec 17th 2012
+// Date : March 12th 2013
 // purpose: This class is intended to provide a serial processing
 // task queue
 
@@ -9,17 +9,36 @@ function Serializer(){
   this.processing = false;
 }
 
-// init the object with the connection and the hash name
+/**
+ * Used to add a job/function to the queue
+ * @param scope - scope of the function
+ * @param func  - function to execute - function should be of the signature
+ *  func(param1, param2, ... , callback)
+ * @param paramArray - function params [ excluding the callback]
+ * @param cb         - callback when the job is executed. callback is of the form
+ *  callback (error, result)
+ */
 Serializer.prototype.add = function(scope, func, paramArray, cb){
   cb = cb || function(){};
   var length = this.jobs.push({scope:scope,func:func, params:paramArray, callback:cb});
   if (length === 1){
     process.nextTick(this.process());
   }
-  console.log('serializer : ');
-  console.log('    length : ' + length);
 };
 
+
+/**
+ * Get the current length of the job queue. Usefull for debugging.
+ * @return {Number}
+ */
+Serializer.prototype.length = function(){
+  return this.jobs.length();
+};
+
+/**
+ * Internal function : called to execute the jobs.
+ * @return {Function}
+ */
 Serializer.prototype.process = function(){
   var that = this;
   return function(){
