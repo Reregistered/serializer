@@ -1,0 +1,14 @@
+{
+    "name": "node-serializer"
+  , "version": "0.0.1"
+  , "description": "Simple job serializer"
+  , "repository" :
+	  { "type" : "git"
+	    , "url" : "git@github.com:Reregistered/serializer.git"
+	  }
+  , "author": "Dov Amihod "
+  , "dependencies": {
+  }
+  , "main": "index"
+  , "engines": { "node": ">= 0.6.0" }
+}
