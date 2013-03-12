@@ -6,7 +6,6 @@
 
 function Serializer(){
   this.jobs       = [];
-  this.processing = false;
 }
 
 /**

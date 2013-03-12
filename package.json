@@ -1,14 +1,21 @@
 {
-    "name": "serializer"
-  , "version": "0.0.1"
-  , "description": "Simple job serializer"
-  , "repository" :
-	  { "type" : "git"
-	    , "url" : "git@github.com:Reregistered/serializer.git"
-	  }
-  , "author": "Dov Amihod "
-  , "dependencies": {
-  }
-  , "main": "index"
-  , "engines": { "node": ">= 0.6.0" }
+  "name": "func-serializer",
+  "version": "0.0.2",
+  "description": "Simple job serializer",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Reregistered/serializer.git"
+  },
+  "author": "Dov Amihod",
+  "dependencies": {},
+  "main": "index",
+  "engines": {
+    "node": ">= 0.6.0"
+  },
+  "readmeFilename": "README.md",
+  "gitHead": "f7f625d0daae840fbd598cffa4dea6ee6aa7f265",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "BSD"
 }
