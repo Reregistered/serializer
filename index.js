@@ -10,16 +10,15 @@ function Serializer(){
 
 /**
  * Used to add a job/function to the queue
- * @param scope - scope of the function
  * @param func  - function to execute - function should be of the signature
  *  func(param1, param2, ... , callback)
  * @param paramArray - function params [ excluding the callback]
  * @param cb         - callback when the job is executed. callback is of the form
  *  callback (error, result)
  */
-Serializer.prototype.add = function(scope, func, paramArray, cb){
+Serializer.prototype.add = function(func, paramArray, cb){
   cb = cb || function(){};
-  var length = this.jobs.push({scope:scope,func:func, params:paramArray, callback:cb});
+  var length = this.jobs.push({func:func, params:paramArray, callback:cb});
   if (length === 1){
     process.nextTick(this.process());
   }
@@ -52,7 +51,7 @@ Serializer.prototype.process = function(){
           process.nextTick(that.process.call(that));
         }
       });
-      job.func.apply(job.scope,job.params);
+      job.func.apply(null,job.params);
     }
   }
 };
