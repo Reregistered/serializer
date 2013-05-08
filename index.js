@@ -4,8 +4,13 @@
 // purpose: This class is intended to provide a serial processing
 // task queue
 
-function Serializer(){
-  this.jobs       = [];
+function Serializer(params){
+  params = params || {};
+
+  this.jobs     = [];
+  this.watchdog = params.watchdog;
+  this.watchdogTimeout = params.watchdogTimeout || 15000;
+  this.logger      = params.logger || function(){};
 }
 
 /**
@@ -26,7 +31,7 @@ Serializer.prototype.add = function(func, paramArray, cb){
 
 
 /**
- * Get the current length of the job queue. Usefull for debugging.
+ * Get the current length of the job queue. Useful for debugging.
  * @return {Number}
  */
 Serializer.prototype.length = function(){
@@ -43,7 +48,9 @@ Serializer.prototype.process = function(){
     var jobsLength = that.jobs.length;
     if (jobsLength) {
       var job = that.jobs[0];
+      that.watchdogStart(job);
       job.params.push(function(err,res){
+        that.watchdogEnd(job);
         job.callback(err,res);
         that.jobs.shift();
         jobsLength = that.jobs.length;
@@ -53,6 +60,29 @@ Serializer.prototype.process = function(){
       });
       job.func.apply(null,job.params);
     }
+  }
+};
+
+Serializer.prototype.watchdogStart = function(jobInfo){
+  if (this.watchdog){
+    var that = this;
+    jobInfo.watchdogTimer = setTimeout(function(){
+      that.logger('*************** WARNING ***************');
+      that.logger('*************** WARNING ***************');
+      that.logger('**');
+      that.logger('**         Watchdog exceeded');
+      that.logger('**   job params - ' + JSON.stringify(jobInfo.params));
+      that.logger('**************************************');
+      // and try to keep running
+      jobInfo.params[jobInfo.params.length-1]('Job timeout',null);
+    }, that.watchdogTimeout);
+  }
+};
+
+Serializer.prototype.watchdogEnd = function(jobInfo){
+  if (jobInfo.watchdogTimer){
+    clearTimeout(jobInfo.watchdogTimer);
+    jobInfo.watchdogTimer = 0;
   }
 };
 
