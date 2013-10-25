@@ -2,7 +2,7 @@
 // created by: Dov Amihod
 // Date : March 12th 2013
 // purpose: This class is intended to provide a serial processing along the lines of
-// a common 'key'. Jpbs are processed in parallel unless there is a currently executing
+// a common 'key'. Jobs are processed in parallel unless there is a currently executing
 // job with the same key.
 
 var path = require('path'),
