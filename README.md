@@ -1,7 +1,8 @@
 serializer
 ==========
 
-Used to serialize the execution of jobs.
+Used to serialize the execution of functions
+Now exposes Keyed serializer which allows you to serialize execution based on common keys.
 
 Example usage
 =============
