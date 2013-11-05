@@ -35,7 +35,7 @@ Pool.prototype.getItem = function () {
 
   var returnElement = this.pool.pop();
   if (!returnElement) {
-    returnElement = this.fnCreateElement();
+    returnElement = this.fnElementCreate();
   }
   return returnElement;
 };
