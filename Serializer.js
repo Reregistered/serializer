@@ -8,6 +8,7 @@ function Serializer(params){
   params = params || {};
 
   this.jobs     = [];
+  this.jobIdx   = 0;
   this.watchdog = params.watchdog;
   this.watchdogTimeout = params.watchdogTimeout || 15000;
   this.logger      = params.logger || function(){};
@@ -23,10 +24,18 @@ function Serializer(params){
  */
 Serializer.prototype.add = function(func, paramArray, cb){
   cb = cb || function(){};
-  var length = this.jobs.push({func:func, params:paramArray, callback:cb});
+
+  var length = this.jobs.push({
+    func: func,
+    params: paramArray,
+    jobIdx: ++this.jobIdx,
+    callback: cb});
+
   if (length === 1){
     process.nextTick(this.process());
   }
+
+  return this.jobIdx;
 };
 
 
@@ -68,17 +77,11 @@ Serializer.prototype.watchdogStart = function(jobInfo){
     var that = this;
     jobInfo.watchdogTimer = setTimeout(function(){
 
-      try {
-        var traceParams = JSON.stringify(jobInfo.params);
-      } catch (err) {
-        // do nothing
-        traceParams = err.message;
-      }
       that.logger('*************** WARNING ***************');
       that.logger('*************** WARNING ***************');
       that.logger('**');
       that.logger('**         Watchdog exceeded');
-      that.logger('**   job params - ' + traceParams);
+      that.logger('**   job params - ' + jobInfo.jobIdx);
       that.logger('**************************************');
       // and try to keep running
       jobInfo.params[jobInfo.params.length-1]('Job timeout',null);
