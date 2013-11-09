@@ -53,7 +53,7 @@ KeyedSerializer.prototype.add = function(in_key, in_func, in_paramArray, cb){
     cb(err,res);
   };
 
-  queue.add(in_func, in_paramArray, localCb);
+  return queue.add(in_func, in_paramArray, localCb);
 
 };
 
